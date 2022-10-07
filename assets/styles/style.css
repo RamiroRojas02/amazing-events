@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+header {
+  min-height: 20vh;
+}
+.main {
+  min-height: 70vh;
+  background-color: rgb(61, 4, 21);
+  width: 100%;
+}
+footer {
+  height: 10vh;
+}
+.card {
+  height: 25rem;
+}
+img {
+  height: 50%;
+  object-fit: cover;
+}
+.active{
+ background-color: rgb(94, 3, 30);
+ border-radius: 5px;
+
+}
+
+#search-bar {
+  background-color: rgb(19, 18, 18);
+}
+@media (max-width: 660px) {
+  body {
+    width: 100% !important;
+  }
+  footer {
+    width: 100% !important;
+  }
+  main {
+    width: 100% !important;
+  }
+  header {
+    width: 100% !important;
+  }
+}
