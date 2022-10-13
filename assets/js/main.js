@@ -1,23 +1,8 @@
 printCardEvents(data.events, getContainer("containerCard"));
-filter(
-  data.events,
-  getContainer("containerCard-Coming"),
-  getContainer("containerCard-Past"),
-  data.currentDate
-);
+
 // ----------------------------Functions---------------------------------------------------------------
 function getContainer(idContainer) {
   return document.getElementById(idContainer);
-}
-
-function filter(array, container, container2, property) {
-  array.filter(function (element) {
-    if (element.date > property) {
-      cardEvents(array, container);
-    } else {
-      cardEvents(array, container2);
-    }
-  });
 }
 
 function printCardEvents(array, container) {
