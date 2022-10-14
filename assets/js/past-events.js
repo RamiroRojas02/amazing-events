@@ -1,5 +1,5 @@
 eventFilter(data.events, data.currentDate, getContainer("containerCard-Past"));
-
+category(data.events)
 // ----------------------------Functions---------------------------------------------------------------
 function getContainer(idContainer) {
   return document.getElementById(idContainer);
@@ -13,9 +13,23 @@ function eventFilter(array, property, container) {
     });
 }
 
-function categoryFilt(array){
-  array.filter
+function category(array) {
+  let categoryEvents = array.map((element) => element.category);
+  categoryEvents =  new Set(categoryEvents);
+  categoryEvents.forEach(element => categoryCheckBox(element, getContainer("checkBox")))
+}
 
+function categoryCheckBox(category, container) {
+  container.innerHTML += `
+    <div class="form-check">
+      <input
+    type="checkbox"
+    class="form-check-input"
+    id="${category}"
+      />
+    <label class="form-check-label" for="${category}"
+    >${category}</label>
+</div>`;
 }
 
 

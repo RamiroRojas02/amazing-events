@@ -1,5 +1,11 @@
 printCardEvents(data.events, getContainer("containerCard"));
 
+category(data.events);
+// ----------------------------Events------------------------------------------------------------------
+
+
+
+
 // ----------------------------Functions---------------------------------------------------------------
 function getContainer(idContainer) {
   return document.getElementById(idContainer);
@@ -9,6 +15,29 @@ function printCardEvents(array, container) {
   array.forEach((element) => cardEvents(element, container));
 }
 
+
+let categoryEvents = data.events.map((element) => element.category);
+function category(array) {
+  let categoryEvents = array.map((element) => element.category).sort();
+  
+  categoryEvents = new Set(categoryEvents);
+  categoryEvents.forEach((element) =>
+    categoryCheckBox(element, getContainer("checkBox"))
+  );
+}
+
+function categoryCheckBox(category, container) {
+  container.innerHTML += `
+    <div class="form-check">
+      <input
+    type="checkbox"
+    class="form-check-input"
+    id="${category}"
+      />
+    <label class="form-check-label" for="${category}"
+    >${category}</label>
+</div>`;
+}
 function cardEvents(show, func) {
   func.innerHTML += `
     <div class="col-12 col-md-6 col-lg-3 pt-2">

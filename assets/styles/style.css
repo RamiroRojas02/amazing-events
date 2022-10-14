@@ -17,9 +17,12 @@ footer {
 .card {
   height: 25rem;
 }
-img {
-  height: 50%;
+.card-img-top{
+  height: 40%;
   object-fit: cover;
+}
+.card-body{
+  height: 60%;
 }
 .active{
  background-color: rgb(94, 3, 30);
