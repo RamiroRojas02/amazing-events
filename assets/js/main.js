@@ -2,9 +2,16 @@ printCardEvents(data.events, getContainer("containerCard"));
 
 category(data.events);
 // ----------------------------Events------------------------------------------------------------------
-
-
-
+getContainer("search").addEventListener("input", function (event) {
+  let events = data.events.filter((events) =>
+    events.name.toLocaleLowerCase().includes(event.target.value)
+  );
+  let conteinerCard = getContainer("containerCard");
+  conteinerCard.innerHTML = "";
+  for (const key of events) {
+    cardEvents(key, conteinerCard);
+  }
+});
 
 // ----------------------------Functions---------------------------------------------------------------
 function getContainer(idContainer) {
@@ -15,11 +22,8 @@ function printCardEvents(array, container) {
   array.forEach((element) => cardEvents(element, container));
 }
 
-
-let categoryEvents = data.events.map((element) => element.category);
 function category(array) {
   let categoryEvents = array.map((element) => element.category).sort();
-  
   categoryEvents = new Set(categoryEvents);
   categoryEvents.forEach((element) =>
     categoryCheckBox(element, getContainer("checkBox"))
