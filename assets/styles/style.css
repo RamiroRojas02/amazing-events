@@ -29,6 +29,9 @@ footer {
  border-radius: 5px;
 
 }
+#detail-card{
+  min-height: 25vh !important;
+}
 
 #search-bar {
   background-color: rgb(19, 18, 18);

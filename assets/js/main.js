@@ -95,7 +95,7 @@ function cardEvents(show, func) {
           </p>
           <div class="d-flex justify-content-between">
             <p>price: $ ${show.price}</p>
-            <a href="./pages/details.html?id=${show.id}" class="btn btn-primary">
+            <a href="./pages/details.html?id=${show._id}" class="btn btn-primary">
               details
             </a>
           </div>
