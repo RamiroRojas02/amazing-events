@@ -9,7 +9,7 @@ function getEventDetail() {
 getEventDetail();
 function printDetails(e) {
   let container = document.getElementById("detail-conteiner");
-
+//
   container.innerHTML = `
   <div class="card flex-column">
     <div class="row h-100 flex-wrap " id="detail">

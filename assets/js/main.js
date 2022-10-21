@@ -1,28 +1,44 @@
+// -------------------------------API-----------------------------------------------
+
+
+
+
+
+
+
+
+
 printCardEvents(data.events, getContainer("containerCard"));
 
 category(data.events);
 // ----------------------------Events------------------------------------------------------------------
-getContainer("search").addEventListener("input", function (event) {
-  let events = data.events.filter((events) =>
-    events.name
-      .toLocaleLowerCase()
-      .includes(event.target.value.toLocaleLowerCase())
-  );
-  let conteinerCard = getContainer("containerCard");
-  conteinerCard.innerHTML = "";
-  for (const key of events) {
-    cardEvents(key, conteinerCard);
-  }
-});
-
+getContainer("search").addEventListener("input",filtCards)
 // ----------------------------Functions---------------------------------------------------------------
 function getContainer(idContainer) {
   return document.getElementById(idContainer);
 }
-
+function searchFilter(array, text) {
+  let filteringSearch = array.filter(e => e.name.toLocaleLowerCase().includes(text.toLocaleLowerCase()))
+  if (filteringSearch.length === 0) {
+    let cards = getContainer("containerCard")
+    cards.innerHTML = `<h2>NO HUBO CONINCIDENCIAS</h2> `
+    console.log("hola ando pero no imprimo nose porque");
+  }
+  return filteringSearch
+}
 function printCardEvents(array, container) {
   array.forEach((element) => cardEvents(element, container));
 }
+function filtCards() {
+  let searchId = getContainer("search")
+  let checkBoxFilter = checkSearch(data.events)
+  let searchFilt = searchFilter(checkBoxFilter,searchId.value)
+  if (searchFilt !== 0) {
+    getContainer("containerCard").innerHTML = ""
+  }
+  printCardEvents(searchFilt,getContainer("containerCard"))
+}
+
 
 function category(array) {
   let categoryEvents = array.map((element) => element.category).sort();
@@ -31,6 +47,7 @@ function category(array) {
     categoryCheckBox(element, getContainer("checkBox"))
   );
 }
+
 function checkSearch(array) {
   let checks = document.querySelectorAll(".checkbox:checked");
   let filterCheck = [];
@@ -43,17 +60,11 @@ function checkSearch(array) {
 
     filterCheck = filterCheck.concat(newArray);
   }
+
   if (filterCheck.length === 0) {
     filterCheck = array;
   }
-  if (filterCheck.length >= 1) {
-    getContainer("containerCard").innerHTML = ""
-    filterCheck.forEach((e) => cardEvents(e,getContainer("containerCard")));
-  }
-  
-}
-function eventFilter(fn,value) {
-  
+  return filterCheck
 }
 
 function categoryCheckBox(category, container) {
@@ -74,7 +85,7 @@ function categoryCheckBox(category, container) {
   let checks = document.querySelectorAll(".checkbox");
   checks.forEach((forEveryCheck) =>
     forEveryCheck.addEventListener("click", () => {
-      checkSearch(data.events);
+      filtCards();
     })
   );
 }
