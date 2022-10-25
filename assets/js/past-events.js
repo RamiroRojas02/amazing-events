@@ -15,7 +15,7 @@ async function fetchApi() {
     );
     function filtCards() {
       let searchId = getContainer("search");
-      let checkBoxFilter = checkSearch(data.events);
+      let checkBoxFilter = checkSearch(events);
       console.log(checkBoxFilter);
       let searchFilt = searchFilter(checkBoxFilter, searchId.value);
       if (searchFilt.length !== 0) {

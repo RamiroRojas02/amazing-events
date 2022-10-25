@@ -29,6 +29,10 @@ footer {
  border-radius: 5px;
 
 }
+#detail-conteiner{
+  background-color: rgb(61, 4, 21);
+  height: 75%;
+}
 #detail-card{
   min-height: 25vh !important;
 }
