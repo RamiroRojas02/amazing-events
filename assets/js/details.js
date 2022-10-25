@@ -1,15 +1,21 @@
-function getEventDetail() {
-  let id = location.search.slice(4);
-  let event = data.events.filter((element) => (element._id === Number(id)));
-  
-  event = event[0];
-  console.log(event);
-  printDetails(event);
+async function fetchApi() {
+  try {
+    let promise = await fetch(
+      "https://mh-amazing.herokuapp.com/amazing"
+    );
+    let data = await promise.json();
+    let id = location.search.slice(4);
+    let event = data.events.filter((element) => element.id === id);
+    event = event[0];
+    printDetails(event);
+  } catch (error) {}
 }
-getEventDetail();
+
+fetchApi()
+
 function printDetails(e) {
   let container = document.getElementById("detail-conteiner");
-//
+  //
   container.innerHTML = `
   <div class="card flex-column">
     <div class="row h-100 flex-wrap " id="detail">

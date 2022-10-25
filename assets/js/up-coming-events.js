@@ -1,29 +1,52 @@
-eventFilter(
-  data.events,
-  data.currentDate,
-  getContainer("containerCard-Coming")
-);
-category(data.events);
-let eventsComing = data.events.filter((e) => e.date > data.currentDate);
+async function fetchApi() {
+  try {
+    let promise = await fetch("https://mh-amazing.herokuapp.com/amazing");
+    let data = await promise.json();
+    let events = data.events.filter((e) => e.date > data.date);
+    printCardEvents(events, getContainer("containerCard-Coming"));
+    getContainer("search").addEventListener("input", filtCards);
+    category(events);
 
-// ----------------------------Events------------------------------------------------------------------
-getContainer("search").addEventListener("input", function (event) {
-  let events = data.events.filter((events) =>
-    events.name
-      .toLocaleLowerCase()
-      .includes(event.target.value.toLocaleLowerCase())
-  );
-  let coming = events.filter((e) => e.date > data.currentDate);
+    let checks = document.querySelectorAll(".checkbox");
+    checks.forEach((forEveryCheck) =>
+      forEveryCheck.addEventListener("click", () => {
+        filtCards();
+      })
+    );
+    function filtCards() {
+      let searchId = getContainer("search");
+      let checkBoxFilter = checkSearch(data.events);
 
-  let conteinerCard = getContainer("containerCard-Coming");
-  conteinerCard.innerHTML = "";
-  for (const key of coming) {
-    cardEvents(key, conteinerCard);
-  }
-});
+      let searchFilt = searchFilter(checkBoxFilter, searchId.value);
+
+      if (searchFilt.length !== 0) {
+        getContainer("containerCard-Coming").innerHTML = "";
+      } else {
+        getContainer(
+          "containerCard-Coming"
+        ).innerHTML = `<h2 class="text-center text-white" >NO HUBO CONINCIDENCIAS</h2> `;
+        console.log("hola");
+      }
+      printCardEvents(searchFilt, getContainer("containerCard-Coming"));
+    }
+    return events;
+  } catch {}
+}
+
+fetchApi();
+
 // ----------------------------Functions---------------------------------------------------------------
 function getContainer(idContainer) {
   return document.getElementById(idContainer);
+}
+function searchFilter(array, text) {
+  let filteringSearch = array.filter((e) =>
+    e.name.toLocaleLowerCase().includes(text.toLocaleLowerCase())
+  );
+  return filteringSearch;
+}
+function printCardEvents(array, container) {
+  array.forEach((element) => cardEvents(element, container));
 }
 
 function category(array) {
@@ -33,13 +56,12 @@ function category(array) {
     categoryCheckBox(element, getContainer("checkBox"))
   );
 }
+
 function checkSearch(array) {
   let checks = document.querySelectorAll(".checkbox:checked");
   let filterCheck = [];
-  console.log("hola");
-  let comingArray = array.filter((e) => e.date > data.currentDate);
   for (let eventsCategory of checks) {
-    let newArray = comingArray.filter(
+    let newArray = array.filter(
       (everyEvent) =>
         everyEvent.category.toLocaleLowerCase().split(" ").join("-") ===
         eventsCategory.id
@@ -47,55 +69,28 @@ function checkSearch(array) {
 
     filterCheck = filterCheck.concat(newArray);
   }
-  if (filterCheck.length === 0) {
-    filterCheck = comingArray;
-  }
-  if (filterCheck.length >= 1) {
-    getContainer("containerCard-Coming").innerHTML = "";
-    filterCheck.forEach((e) =>
-      cardEvents(e, getContainer("containerCard-Coming"))
-    );
-  }
-}
 
-function eventFilter(array, property, container) {
-  array
-    .filter((element) => element.date > property)
-    .forEach((element) => {
-      cardEvents(element, container);
-    });
-}
-function category(array) {
-  let categoryEvents = array.map((element) => element.category);
-  categoryEvents = new Set(categoryEvents);
-  categoryEvents.forEach((element) =>
-    categoryCheckBox(element, getContainer("checkBox"))
-  );
+  if (filterCheck.length === 0) {
+    filterCheck = array;
+  }
+  return filterCheck;
 }
 
 function categoryCheckBox(category, container) {
   container.innerHTML += `
-  <div class="form-check">
-  <input
-type="checkbox"
-class="form-check-input checkbox"
-id="${category.toLocaleLowerCase().split(" ").join("-")}"
-  />
-<label class="form-check-label" for="${category
-    .toLocaleLowerCase()
-    .split(" ")
-    .join("-")}"
->${category}</label>
+    <div class="form-check">
+      <input
+    type="checkbox"
+    class="form-check-input checkbox"
+    id="${category.toLocaleLowerCase().split(" ").join("-")}"
+      />
+    <label class="form-check-label" for="${category
+      .toLocaleLowerCase()
+      .split(" ")
+      .join("-")}"
+    >${category}</label>
 </div>`;
-
-  let checks = document.querySelectorAll(".checkbox");
-  checks.forEach((forEveryCheck) =>
-    forEveryCheck.addEventListener("click", () => {
-      checkSearch(data.events);
-    })
-  );
 }
-
 function cardEvents(show, func) {
   func.innerHTML += `
     <div class="col-12 col-md-6 col-lg-3 pt-2">
@@ -112,7 +107,7 @@ function cardEvents(show, func) {
           </p>
           <div class="d-flex justify-content-between">
             <p>price: $ ${show.price}</p>
-            <a href="./pages/details.html" class="btn btn-primary">
+            <a href="./details.html?id=${show.id}" class="btn btn-primary">
               details
             </a>
           </div>

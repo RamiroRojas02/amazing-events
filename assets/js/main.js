@@ -2,7 +2,7 @@
 async function fetchApi() {
   try {
     let promise = await fetch(
-      "https://amazing-events.herokuapp.com/api/events"
+      "https://mh-amazing.herokuapp.com/amazing"
     );
     let data = await promise.json();
     let events = data.events;
@@ -18,15 +18,21 @@ async function fetchApi() {
         filtCards();
       })
     );
-    console.log(checks);
     function filtCards() {
       let searchId = getContainer("search");
       let checkBoxFilter = checkSearch(data.events);
+      console.log(checkBoxFilter);
       let searchFilt = searchFilter(checkBoxFilter, searchId.value);
-      if (searchFilt !== 0) {
+      if (searchFilt.length !== 0) {
         getContainer("containerCard").innerHTML = "";
+      } else {
+        getContainer(
+          "containerCard"
+        ).innerHTML = `<h2 class="text-center text-white" >NO HUBO CONINCIDENCIAS</h2> `;
+        console.log("hola");
       }
       printCardEvents(searchFilt, getContainer("containerCard"));
+      console.log(searchFilt);
     }
     return events;
   } catch {}
@@ -34,9 +40,6 @@ async function fetchApi() {
 
 fetchApi();
 
-// -----------------------------------------------------------------------------------
-
-// ----------------------------Events------------------------------------------------------------------
 
 // ----------------------------Functions---------------------------------------------------------------
 function getContainer(idContainer) {
@@ -46,11 +49,6 @@ function searchFilter(array, text) {
   let filteringSearch = array.filter((e) =>
     e.name.toLocaleLowerCase().includes(text.toLocaleLowerCase())
   );
-  if (filteringSearch.length === 0) {
-    let cards = getContainer("containerCard");
-    cards.innerHTML = `<h2>NO HUBO CONINCIDENCIAS</h2> `;
-    console.log("hola ando pero no imprimo nose porque");
-  }
   return filteringSearch;
 }
 function printCardEvents(array, container) {
@@ -100,7 +98,7 @@ function categoryCheckBox(category, container) {
 </div>`;
 }
 function cardEvents(show, func) {
-  // console.log(show);
+  console.log(show);
   func.innerHTML += `
     <div class="col-12 col-md-6 col-lg-3 pt-2">
       <div class="card">
@@ -116,7 +114,7 @@ function cardEvents(show, func) {
           </p>
           <div class="d-flex justify-content-between">
             <p>price: $ ${show.price}</p>
-            <a href="./pages/details.html?id=${show._id}" class="btn btn-primary">
+            <a href="./pages/details.html?id=${show.id}" class="btn btn-primary">
               details
             </a>
           </div>
