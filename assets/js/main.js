@@ -1,44 +1,59 @@
 // -------------------------------API-----------------------------------------------
+async function fetchApi() {
+  try {
+    let promise = await fetch(
+      "https://mh-amazing.herokuapp.com/amazing"
+    );
+    let data = await promise.json();
+    let events = data.events;
+    console.log(events);
+
+    printCardEvents(events, getContainer("containerCard"));
+    getContainer("search").addEventListener("input", filtCards);
+    category(events);
+
+    let checks = document.querySelectorAll(".checkbox");
+    checks.forEach((forEveryCheck) =>
+      forEveryCheck.addEventListener("click", () => {
+        filtCards();
+      })
+    );
+    function filtCards() {
+      let searchId = getContainer("search");
+      let checkBoxFilter = checkSearch(data.events);
+      console.log(checkBoxFilter);
+      let searchFilt = searchFilter(checkBoxFilter, searchId.value);
+      if (searchFilt.length !== 0) {
+        getContainer("containerCard").innerHTML = "";
+      } else {
+        getContainer(
+          "containerCard"
+        ).innerHTML = `<h2 class="text-center text-white" >NO HUBO CONINCIDENCIAS</h2> `;
+        console.log("hola");
+      }
+      printCardEvents(searchFilt, getContainer("containerCard"));
+      console.log(searchFilt);
+    }
+    return events;
+  } catch {}
+}
+
+fetchApi();
 
 
-
-
-
-
-
-
-
-printCardEvents(data.events, getContainer("containerCard"));
-
-category(data.events);
-// ----------------------------Events------------------------------------------------------------------
-getContainer("search").addEventListener("input",filtCards)
 // ----------------------------Functions---------------------------------------------------------------
 function getContainer(idContainer) {
   return document.getElementById(idContainer);
 }
 function searchFilter(array, text) {
-  let filteringSearch = array.filter(e => e.name.toLocaleLowerCase().includes(text.toLocaleLowerCase()))
-  if (filteringSearch.length === 0) {
-    let cards = getContainer("containerCard")
-    cards.innerHTML = `<h2>NO HUBO CONINCIDENCIAS</h2> `
-    console.log("hola ando pero no imprimo nose porque");
-  }
-  return filteringSearch
+  let filteringSearch = array.filter((e) =>
+    e.name.toLocaleLowerCase().includes(text.toLocaleLowerCase())
+  );
+  return filteringSearch;
 }
 function printCardEvents(array, container) {
   array.forEach((element) => cardEvents(element, container));
 }
-function filtCards() {
-  let searchId = getContainer("search")
-  let checkBoxFilter = checkSearch(data.events)
-  let searchFilt = searchFilter(checkBoxFilter,searchId.value)
-  if (searchFilt !== 0) {
-    getContainer("containerCard").innerHTML = ""
-  }
-  printCardEvents(searchFilt,getContainer("containerCard"))
-}
-
 
 function category(array) {
   let categoryEvents = array.map((element) => element.category).sort();
@@ -64,7 +79,7 @@ function checkSearch(array) {
   if (filterCheck.length === 0) {
     filterCheck = array;
   }
-  return filterCheck
+  return filterCheck;
 }
 
 function categoryCheckBox(category, container) {
@@ -81,16 +96,9 @@ function categoryCheckBox(category, container) {
       .join("-")}"
     >${category}</label>
 </div>`;
-
-  let checks = document.querySelectorAll(".checkbox");
-  checks.forEach((forEveryCheck) =>
-    forEveryCheck.addEventListener("click", () => {
-      filtCards();
-    })
-  );
 }
 function cardEvents(show, func) {
-  // console.log(show);
+  console.log(show);
   func.innerHTML += `
     <div class="col-12 col-md-6 col-lg-3 pt-2">
       <div class="card">
@@ -106,7 +114,7 @@ function cardEvents(show, func) {
           </p>
           <div class="d-flex justify-content-between">
             <p>price: $ ${show.price}</p>
-            <a href="./pages/details.html?id=${show._id}" class="btn btn-primary">
+            <a href="./pages/details.html?id=${show.id}" class="btn btn-primary">
               details
             </a>
           </div>

@@ -12,10 +12,10 @@ header {
   width: 100%;
 }
 footer {
-  height: 10vh;
+ min-height: 10vh;
 }
 .card {
-  height: 25rem;
+  height: 27rem;
 }
 .card-img-top{
   height: 40%;
@@ -28,6 +28,10 @@ footer {
  background-color: rgb(94, 3, 30);
  border-radius: 5px;
 
+}
+#detail-conteiner{
+  background-color: rgb(61, 4, 21);
+  height: 75%;
 }
 #detail-card{
   min-height: 25vh !important;
